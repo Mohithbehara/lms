@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+@import "tailwindcss";
+
+/* Custom Theme Configuration */
+@theme {
+  /* Custom Font Sizes */
+  --font-size-course-details-heading-small: 26px;
+  --font-size-course-details-heading-large: 36px;
+  --font-size-home-heading-small: 28px;
+  --font-size-home-heading-large: 48px;
+  --font-size-default: 15px;
+  
+  /* Custom Line Heights */
+  --line-height-course-details-heading-small: 36px;
+  --line-height-course-details-heading-large: 44px;
+  --line-height-home-heading-small: 34px;
+  --line-height-home-heading-large: 56px;
+  --line-height-default: 21px;
+  
+  /* Custom Colors (example) */
+  --color-primary: #3b82f6;
+  --color-secondary: #64748b;
+  --color-accent: #f59e0b;
+  
+  /* Custom Spacing (example) */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+}
+
+/* Custom Utility Classes */
+@utility text-course-details-heading-small {
+  font-size: var(--font-size-course-details-heading-small);
+  line-height: var(--line-height-course-details-heading-small);
+}
+
+@utility text-course-details-heading-large {
+  font-size: var(--font-size-course-details-heading-large);
+  line-height: var(--line-height-course-details-heading-large);
+}
+
+@utility text-home-heading-small {
+  font-size: var(--font-size-home-heading-small);
+  line-height: var(--line-height-home-heading-small);
+}
+
+@utility text-home-heading-large {
+  font-size: var(--font-size-home-heading-large);
+  line-height: var(--line-height-home-heading-large);
+}
+
+@utility text-default {
+  font-size: var(--font-size-default);
+  line-height: var(--line-height-default);
+}
+
+/* Line Clamp Utilities */
+@utility line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+@utility line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@utility line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+@utility line-clamp-4 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+/* Global Styles */
+* {
+  font-family: Outfit;
+}
