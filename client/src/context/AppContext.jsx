@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { dummyCourses } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import humanizeDuration from "humanize-duration";
-
+import {useAuth, useUser} from "@clerk/clerk-react"
 // eslint-disable-next-line react-refresh/only-export-components
 export const AppContext = createContext()
 
@@ -17,6 +17,9 @@ export const AppContextProvider = (props) => {
     const [enrolledCourses, setEnrolledCourses]=useState([])
 
     const navigate=useNavigate()
+    const {getToken} = useAuth()
+    const {user}=useUser()
+
     // Fetch all courses
     const fetchAllCourses = async () => {
         try {
@@ -95,6 +98,20 @@ export const AppContextProvider = (props) => {
         fetchAllCourses()
         fetchUserEnrolledCourses()
     }, [])
+
+    const logToken = async ()=>{
+        console.log(await getToken({ template: "lms" }))
+    }
+    useEffect(()=>{
+        if(user){
+            logToken()
+        }
+
+    },[user, getToken])
+
+    // const token = await getToken({ template: "lms" });
+    // console.log(token);
+
 
     const value = {
         currency,
