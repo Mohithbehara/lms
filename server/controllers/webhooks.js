@@ -65,16 +65,28 @@ export const clerkWebhooks = async (req,res)=>{
 const stripeInstance= new Stripe(process.env.STRIPE_SECRET_KEY)
 
 export const stripeWebhooks = async(request,response)=>{
-    const sig = request.headers['stripe-signature'];
-    let event;
-
     try {
-        event = Stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-    }
-    catch (err) {
-        console.error('Webhook signature verification failed:', err.message);
-        return response.status(400).send(`Webhook Error: ${err.message}`);
-    }
+        const sig = request.headers['stripe-signature'];
+        
+        if (!sig) {
+            console.error('No stripe signature found in headers');
+            return response.status(400).json({error: 'No stripe signature'});
+        }
+        
+        if (!process.env.STRIPE_WEBHOOK_SECRET) {
+            console.error('STRIPE_WEBHOOK_SECRET not found in environment variables');
+            return response.status(500).json({error: 'Webhook secret not configured'});
+        }
+        
+        let event;
+        
+        try {
+            event = Stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+        }
+        catch (err) {
+            console.error('Webhook signature verification failed:', err.message);
+            return response.status(400).json({error: `Webhook verification failed: ${err.message}`});
+        }
 
     try {
         // Handle the event
@@ -163,7 +175,14 @@ export const stripeWebhooks = async(request,response)=>{
         
     } catch (error) {
         console.error('Error processing webhook:', error.message);
-        response.status(500).json({error: 'Internal server error'});
+        console.error('Error stack:', error.stack);
+        response.status(500).json({error: 'Internal server error', details: error.message});
+    }
+    
+    } catch (outerError) {
+        console.error('Outer webhook error:', outerError.message);
+        console.error('Outer error stack:', outerError.stack);
+        return response.status(500).json({error: 'Webhook function failed', details: outerError.message});
     }
 
 
