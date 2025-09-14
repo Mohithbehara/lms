@@ -1,5 +1,9 @@
 import express from 'express'
 import cors from 'cors'
+import 'dotenv/config'
+
+// Import only the webhook controller
+import { stripeWebhooks } from '../controllers/webhooks.js'
 
 const app = express()
 
@@ -14,8 +18,15 @@ app.get('/health', (req, res) => {
         status: 'OK',
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV || 'development',
-        message: 'Basic app working'
+        env: {
+            hasStripeSecret: !!process.env.STRIPE_SECRET_KEY,
+            hasWebhookSecret: !!process.env.STRIPE_WEBHOOK_SECRET,
+            hasMongoURL: !!process.env.MONGODB_URL
+        }
     })
 })
+
+// Add webhook route
+app.post('/stripe', express.raw({type:'application/json'}), stripeWebhooks)
 
 export default app
